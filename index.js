@@ -65,6 +65,7 @@ start();
       });
  };
 
+// GET 
 getRoles = () => {
     connection.query("SELECT id, title FROM role", (err, res) => {
       if (err) throw err;
@@ -97,7 +98,7 @@ getRoles = () => {
     })
   };
 
-
+// ADD SOMETHING 
 
  addSomething = () => {
      inquirer.prompt ([
@@ -258,4 +259,65 @@ getRoles = () => {
       }) 
     })
   };
+
+//   VIEW
+
+viewSomething = () => {
+    inquirer.prompt([
+      {
+        name: "viewChoice",
+        type: "list",
+        message: "What would you like to view?",
+        choices: ["DEPARTMENTS", "ROLES", "EMPLOYEES", "EXIT"]
+      }
+    ]).then(answer => {
+      if (answer.viewChoice === "DEPARTMENTS") {
+        viewDepartments();
+      }
+      else if (answer.viewChoice === "ROLES") {
+        viewRoles();
+      }
+      else if (answer.viewChoice === "EMPLOYEES") {
+        viewEmployees();
+      }
+      else if (answer.viewChoice === "EXIT") {
+        figlet('BYE', (err, result) => {
+          console.log(err || result);
+        });
   
+        connection.end();
+      } else {
+        connection.end();
+      }
+    })
+  };
+
+viewDepartments = () => {
+    connection.query("SELECT * FROM department", (err, res) => {
+      if (err) throw err;
+      figlet('Departments', (err, result) => {
+        console.log(err || result);
+      });
+  
+      printTable(res);
+      start();
+    });
+  };
+  
+viewRoles = () => {
+    connection.query("SELECT  r.id, r.title, r.salary, d.name as Department_Name FROM role AS r INNER JOIN department AS d ON r.department_id = d.id", (err, res) => {
+      if (err) throw err;
+      figlet('Roles', (err, result) => {
+        console.log(err || result);
+      });
+  
+      printTable(res);
+      start();
+    });
+  };
+
+  viewEmployees = () => {
+
+  }
+
+//   UPDATE
