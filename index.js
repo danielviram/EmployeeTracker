@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 // const { start } = require('repl');
 const { printTable } = require('console-table-printer');
 const figlet = require('figlet');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 let roles;
 let departments;
 let managers;
@@ -106,7 +107,7 @@ start();
               connection.end();
             }
       });
- }
+ };
 
  addDepartment = () => {
      inquirer.prompt ([
@@ -116,7 +117,42 @@ start();
          message: "What department would you likd to add?"
          }
      ])
-//      .them (function(answer){
-//          connection.query(`INSERT INTO department (name) VALUES (`${answer.departments}`)`)`)
-//      })
-//  }
+     .them (function(answer){
+         connection.query(`INSERT INTO department (name) VALUES ('${answer.department}')`, (err, res) => {
+            if (err) throw err;
+            console.log("1 new department added: " + answer.department);
+            getDepartments();
+            start();
+          }) 
+        })
+};
+
+addRole = () => {
+        let departmentOptions = [];
+        for (i = 0; i < departments.length; i++) {
+          departmentOptions.push(Object(departments[i]));
+        };
+
+        inquirer.prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "What role woulf ypu like to add?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the salary for this position?"
+
+            },
+            {
+                name: "department_id",
+                type: "input",
+                message: "What is the department for this position?"
+                choices: departmentOptions
+            },
+        ])
+        .then (function(answer){
+            
+        })
+    };
