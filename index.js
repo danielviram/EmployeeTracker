@@ -321,3 +321,13 @@ viewRoles = () => {
   }
 
 //   UPDATE
+updateEmployeeRole = () => {
+    let employeeOptions [];
+     
+    for (var i = 0; i < employees.length; i ++){
+        employeeOptions.push (Object(employees[1]));
+    }
+    inquirer.prompt ([
+        
+    ])
+}
